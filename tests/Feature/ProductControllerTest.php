@@ -6,6 +6,8 @@ use App\Models\Product as ModelsProduct;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\Product;
+use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 
 class ProductControllerTest extends TestCase
 {
@@ -14,10 +16,14 @@ class ProductControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        Sanctum::actingAs(
+            User::factory()->create()
+        );
     }
 
     public function test_index()
-    {
+    {   
         Product::factory()->count(5)->create();
 
         $response = $this->getJson('/api/products');
