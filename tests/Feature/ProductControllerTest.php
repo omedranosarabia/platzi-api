@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Models\Product as ModelsProduct;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -23,14 +24,14 @@ class ProductControllerTest extends TestCase
     }
 
     public function test_index()
-    {   
+    {
         Product::factory()->count(5)->create();
 
         $response = $this->getJson('/api/products');
 
         $response->assertSuccessful();
         $response->assertHeader('content-type', 'application/json');
-        $response->assertJsonCount(5);
+        $response->assertJsonCount(5, 'data');
     }
 
     public function test_create_new_product()
@@ -84,4 +85,21 @@ class ProductControllerTest extends TestCase
         $this->assertDeleted($product);
     }
 
+    public function test_a_product_belongs_to_category()
+    {
+        $category = Category::factory()->create();
+        $product = Product::factory()->create(['category_id' => $category->id]);
+        
+        $this->assertInstanceOf(Category::class, $product->category);
+    }
+
+    public function test_a_product_belongs_to_user()
+    {
+        $user = User::factory()->create();
+
+        $product = Product::factory()->create(['created_by' => $user->id]);
+        
+        $this->assertInstanceOf(User::class, $product->user);
+
+    }
 }

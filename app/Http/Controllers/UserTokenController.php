@@ -19,6 +19,7 @@ class UserTokenController extends Controller
 
         
         $user = User::where('email', $request->get('email'))->first();
+        // dd($user);
         if (!$user || !Hash::check($request->password, $user->password)) {
 
             return response()->json([
