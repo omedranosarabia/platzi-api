@@ -23,3 +23,6 @@ Route::resource('products', \App\Http\Controllers\ProductController::class)->mid
 Route::resource('categories', \App\Http\Controllers\CategoryController::class);
 
 Route::post('sactum/token', [\App\Http\Controllers\UserTokenController::class, '__invoke']);
+
+
+Route::post('newsletter', [\App\Http\Controllers\NewsletterController::class, 'send'])->name('send.newsletter');
